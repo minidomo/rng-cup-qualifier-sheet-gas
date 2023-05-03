@@ -1,5 +1,3 @@
-let API_EXTRACT_SHEET = SS.getSheetByName('API Extraction');
-
 function extractAllLobbyData() {
     let lobbySheetNames = getAllSheetNames().filter(e => LOBBY_SHEET_NAME_REGEX.test(e));
     let allRowData = [];
@@ -24,6 +22,7 @@ function extractAllLobbyData() {
         return;
     }
 
+    let API_EXTRACT_SHEET = SS.getSheetByName('API Extraction');
     API_EXTRACT_SHEET.getRange(2, 1, allRowData.length, allRowData[0].length).setValues(allRowData);
 }
 

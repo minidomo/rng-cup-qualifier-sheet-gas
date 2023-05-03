@@ -58,14 +58,14 @@ function createLobby({
     tier,
     numMaps,
 }) {
-    let TEMPLATE_SHEET = SS.getSheetByName('Lobby - Template');
     let ID_RANGE = 'D2:E2';
     let TIER_RANGE = 'D3:E3';
     let MAPPOOL_RANGE = 'H3:J22';
 
     let lobbyData = generateLobbyData(tier);
 
-    let sheet = TEMPLATE_SHEET.copyTo(SS);
+    let LOBBY_TEMPLATE_SHEET = SS.getSheetByName('Lobby - Template');
+    let sheet = LOBBY_TEMPLATE_SHEET.copyTo(SS);
     sheet.setName(lobbyData.name);
 
     let lobbyIdCell = sheet.getRange(ID_RANGE);
