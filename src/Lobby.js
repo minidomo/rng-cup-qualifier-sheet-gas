@@ -64,7 +64,7 @@ function createLobby({
     tier,
     numMaps,
 }) {
-    let TEMPLATE_SHEET = SS.getSheetByName('Template');
+    let TEMPLATE_SHEET = SS.getSheetByName('Lobby - Template');
     let ID_RANGE = 'D2:E2';
     let TIER_RANGE = 'D3:E3';
     let MAPPOOL_RANGE = 'H3:J22';
