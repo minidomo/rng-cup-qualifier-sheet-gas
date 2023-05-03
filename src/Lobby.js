@@ -84,7 +84,7 @@ function createLobby({
     let modStarRatings = getModStarRatings();
     let beatmapDataArr = [];
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < numMaps; i++) {
         let data = generateBeatmapData(modPercentages, modStarRatings);
         beatmapDataArr.push(data);
     }
@@ -112,11 +112,12 @@ function generateBeatmapData(modCombinationPercentages, modStarRatings) {
             // on google sheets
             // https://webapps.stackexchange.com/a/58018
             // example: https://osu.ppy.sh/beatmapsets/177585#osu/427962
-            let mapTitle = `${beatmap.title} [${beatmap.version}]`.replace('"', '""');
+            let mapTitle = `${beatmap.title} [${beatmap.version}]`.replace(/"/g, '""');
+            let mapHyperlink = `=HYPERLINK("https://osu.ppy.sh/b/${beatmap.beatmap_id}","${mapTitle}")`;
             let mapCommand = `!mp map ${beatmap.beatmap_id} 0`;
             let modCommand = generateMpModsCommand(mods);
 
-            return [mapTitle, mapCommand, modCommand];
+            return [mapHyperlink, mapCommand, modCommand];
         },
     };
 

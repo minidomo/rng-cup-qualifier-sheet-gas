@@ -31,14 +31,6 @@ function authorize() {
 }
 
 function testdebug() {
-    let modStarRatings = getModStarRatings();
-    let modCombinations = getModCombinationPercentages();
-    let ret = [];
-
-    for (let i = 0; i < 10; i++) {
-        let mods = randomMods(modCombinations);
-        ret.push(generateMpModsCommand(mods));
-    }
-
-    UI.alert(JSON.stringify(ret, null, 4));
+    let cell = SETTINGS.getRange('C5');
+    cell.setValue(`=HYPERLINK("https://osu.ppy.sh/b/1139789","something")`);
 }
