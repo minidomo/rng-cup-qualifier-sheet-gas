@@ -16,7 +16,7 @@ function onOpen(event) {
             .addItem('Tier 1', 'createLobbyTier1')
             .addItem('Tier 2', 'createLobbyTier2')
         )
-        .addItem('debug', 'getModStarRatings')
+        .addItem('debug', 'testdebug')
         .addToUi();
 }
 
@@ -28,4 +28,14 @@ function authorize() {
     // sheet, you'll have to authorize and the body isn't executed
     // Otherwise, the body *is* going to be run and tell you you're alraedy authorized
     UI.alert("You're already authorized");
+}
+
+function testdebug() {
+    const ret = [];
+
+    for (let i = 0; i < 10; i++) {
+        ret.push(randomMod());
+    }
+
+    UI.alert(JSON.stringify(ret, null, 4));
 }

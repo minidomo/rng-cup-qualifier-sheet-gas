@@ -68,7 +68,7 @@ function findLeaderboardBeatmaps(mods) {
     const ret = [];
 
     for (let i = 0; i < BEATMAP_SEARCH_REQUEST_PER_ATTEMPT; i++) {
-        const timestamp = generateTimestamp();
+        const timestamp = randomTimestamp();
         const url = createUrl(`${API_URL}/get_beatmaps`, {
             k: apiKey,
             since: timestamp,
@@ -84,7 +84,7 @@ function findLeaderboardBeatmaps(mods) {
     return ret;
 }
 
-function generateTimestamp() {
+function randomTimestamp() {
     const date = randomDate(new Date(2010, 0, 1, 0, 0, 0), new Date());
 
     const month = `${date.getMonth() + 1}`.padStart(2, '0');

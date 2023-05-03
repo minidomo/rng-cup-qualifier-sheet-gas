@@ -76,6 +76,11 @@ function createLobby({
     const tierCell = sheet.getRange(TIER_RANGE);
     tierCell.setValue(tier);
 
+    /*
+    generate mod
+    get desired star rating
+    find beatmap with mod and star rating
+    */
     const beatmap = findSingleBeatmap(6.0, [Mod.HD]);
     const mapCell = sheet.getRange(MAP_RANGE);
     mapCell.setValue(beatmap.beatmap_id);
