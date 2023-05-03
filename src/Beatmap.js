@@ -1,7 +1,7 @@
 function beatmapFilter(beatmap, targetStarRating) {
-    const SR_ERROR = .2;
-    const MAX_LENGTH = 380;
-    const MIN_LENGTH = 180;
+    let SR_ERROR = .2;
+    let MAX_LENGTH = 380;
+    let MIN_LENGTH = 180;
 
     if (beatmap.audio_unavailable !== '0') {
         return false;
@@ -32,18 +32,18 @@ function getClosestStarRatingBeatmap(beatmaps, targetStarRating) {
     }
 
     return beatmaps.reduce((prev, cur) => {
-        const diff1 = Math.abs(prev.difficultyrating - targetStarRating);
-        const diff2 = Math.abs(cur.difficultyrating - targetStarRating);
+        let diff1 = Math.abs(prev.difficultyrating - targetStarRating);
+        let diff2 = Math.abs(cur.difficultyrating - targetStarRating);
         return diff1 < diff2 ? prev : cur;
     }, beatmaps[0]);
 }
 
 function findSingleBeatmap(targetStarRating, mods) {
-    const BEATMAP_SEARCH_MAX_ATTEMPTS = 5;
+    let BEATMAP_SEARCH_MAX_ATTEMPTS = 5;
 
     for (let i = 0; i < BEATMAP_SEARCH_MAX_ATTEMPTS; i++) {
-        const leaderboardMaps = findLeaderboardBeatmaps(mods).filter(e => beatmapFilter(e, targetStarRating));
-        const beatmap = getClosestStarRatingBeatmap(leaderboardMaps, targetStarRating);
+        let leaderboardMaps = findLeaderboardBeatmaps(mods).filter(e => beatmapFilter(e, targetStarRating));
+        let beatmap = getClosestStarRatingBeatmap(leaderboardMaps, targetStarRating);
 
         if (beatmap) {
             return beatmap;
@@ -54,22 +54,22 @@ function findSingleBeatmap(targetStarRating, mods) {
 }
 
 function findLeaderboardBeatmaps(mods) {
-    const BEATMAP_SEARCH_RETURN_LIMIT = 500;
-    const BEATMAP_SEARCH_REQUEST_PER_ATTEMPT = 2;
+    let BEATMAP_SEARCH_RETURN_LIMIT = 500;
+    let BEATMAP_SEARCH_REQUEST_PER_ATTEMPT = 2;
 
-    const modValue = 0;
+    let modValue = 0;
     if (mods.some(e => e === Mod.HR)) {
         modValue = Mod.HR;
     } else if (mods.some(e => e === Mod.DT)) {
         modValue = Mod.DT;
     }
 
-    const apiKey = PROPERTIES.getProperty("apikey");
-    const ret = [];
+    let apiKey = PROPERTIES.getProperty("apikey");
+    let ret = [];
 
     for (let i = 0; i < BEATMAP_SEARCH_REQUEST_PER_ATTEMPT; i++) {
-        const timestamp = randomTimestamp();
-        const url = createUrl(`${API_URL}/get_beatmaps`, {
+        let timestamp = randomTimestamp();
+        let url = createUrl(`${API_URL}/get_beatmaps`, {
             k: apiKey,
             since: timestamp,
             limit: BEATMAP_SEARCH_RETURN_LIMIT,
@@ -77,7 +77,7 @@ function findLeaderboardBeatmaps(mods) {
             mods: modValue,
         });
 
-        const content = requestContent(url);
+        let content = requestContent(url);
         ret.push(...content);
     }
 
@@ -85,19 +85,19 @@ function findLeaderboardBeatmaps(mods) {
 }
 
 function randomTimestamp() {
-    const date = randomDate(new Date(2010, 0, 1, 0, 0, 0), new Date());
+    let date = randomDate(new Date(2010, 0, 1, 0, 0, 0), new Date());
 
-    const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day = `${date.getDate()}`.padStart(2, '0');
-    const hour = `${date.getHours()}`.padStart(2, '0');
-    const minutes = `${date.getMinutes()}`.padStart(2, '0');
-    const second = `${date.getSeconds()}`.padStart(2, '0');
+    let month = `${date.getMonth() + 1}`.padStart(2, '0');
+    let day = `${date.getDate()}`.padStart(2, '0');
+    let hour = `${date.getHours()}`.padStart(2, '0');
+    let minutes = `${date.getMinutes()}`.padStart(2, '0');
+    let second = `${date.getSeconds()}`.padStart(2, '0');
 
     return `${date.getFullYear()}-${month}-${day} ${hour}:${minutes}:${second}`;
 }
 
 function randomDate(start, end) {
-    const startTime = start.getTime();
-    const endTime = end.getTime();
+    let startTime = start.getTime();
+    let endTime = end.getTime();
     return new Date(startTime + Math.random() * (endTime - startTime));
 }

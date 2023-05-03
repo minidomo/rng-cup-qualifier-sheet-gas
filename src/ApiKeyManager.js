@@ -1,12 +1,12 @@
 // Code provided by LeoFLT
 function showKeyStoringPrompt() {
     function apiKeyFlow() {
-        const result = UI.prompt(
+        let result = UI.prompt(
             "Please enter your osu! API key",
             "Create one using https://osu.ppy.sh/p/api if you don't have it",
             UI.ButtonSet.OK_CANCEL
         );
-        const text = result.getResponseText();
+        let text = result.getResponseText();
 
         // user pressed OK
         if (result.getSelectedButton() === UI.Button.OK) {

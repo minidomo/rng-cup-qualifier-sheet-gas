@@ -1,8 +1,8 @@
-const SS = SpreadsheetApp.getActiveSpreadsheet();
-const UI = SpreadsheetApp.getUi();
-const CACHE = CacheService.getDocumentCache();
-const PROPERTIES = PropertiesService.getScriptProperties();
-const SETTINGS = SS.getSheetByName('Settings');
+let SS = SpreadsheetApp.getActiveSpreadsheet();
+let UI = SpreadsheetApp.getUi();
+let CACHE = CacheService.getDocumentCache();
+let PROPERTIES = PropertiesService.getScriptProperties();
+let SETTINGS = SS.getSheetByName('Settings');
 
 // Adds extra menu
 function onOpen(event) {
@@ -31,10 +31,13 @@ function authorize() {
 }
 
 function testdebug() {
-    const ret = [];
+    let modStarRatings = getModStarRatings();
+    let modCombinations = getModCombinationPercentages();
+    let ret = [];
 
     for (let i = 0; i < 10; i++) {
-        ret.push(randomMod());
+        let mods = randomMods(modCombinations);
+        ret.push(generateMpModsCommand(mods));
     }
 
     UI.alert(JSON.stringify(ret, null, 4));

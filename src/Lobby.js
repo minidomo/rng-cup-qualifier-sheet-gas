@@ -1,16 +1,20 @@
 function getAllSheetNames() {
-    const arr = SS.getSheets()
+    let arr = SS.getSheets()
         .map(e => e.getSheetName());
     return arr;
 }
 
-function generateLobbyId() {
-    const LOBBY_SHEET_NAME_REGEX = /^L(\d+)/;
+function createEmptyTable(rows, columns) {
+    return Array(rows).fill(Array(columns).fill(''));
+}
 
-    const lobbyIdSet = new Set(
+function generateLobbyId() {
+    let LOBBY_SHEET_NAME_REGEX = /^L(\d+)/;
+
+    let lobbyIdSet = new Set(
         getAllSheetNames()
             .map(e => {
-                const match = e.match(LOBBY_SHEET_NAME_REGEX);
+                let match = e.match(LOBBY_SHEET_NAME_REGEX);
 
                 if (!match) {
                     return null;
@@ -30,10 +34,10 @@ function generateLobbyId() {
 }
 
 function generateLobbyData(tier) {
-    const id = generateLobbyId();
-    const name = `L${id} - T${tier}`;
+    let id = generateLobbyId();
+    let name = `L${id} - T${tier}`;
 
-    const ret = {
+    let ret = {
         id,
         tier,
         name,
@@ -60,28 +64,61 @@ function createLobby({
     tier,
     numMaps,
 }) {
-    const TEMPLATE_SHEET = SS.getSheetByName('Template');
-    const ID_RANGE = 'D2:E2';
-    const TIER_RANGE = 'D3:E3';
-    const MAP_RANGE = 'H3';
+    let TEMPLATE_SHEET = SS.getSheetByName('Template');
+    let ID_RANGE = 'D2:E2';
+    let TIER_RANGE = 'D3:E3';
+    let MAPPOOL_RANGE = 'H3:J22';
 
-    const lobbyData = generateLobbyData(tier);
+    let lobbyData = generateLobbyData(tier);
 
-    const sheet = TEMPLATE_SHEET.copyTo(SS);
+    let sheet = TEMPLATE_SHEET.copyTo(SS);
     sheet.setName(lobbyData.name);
 
-    const lobbyIdCell = sheet.getRange(ID_RANGE);
+    let lobbyIdCell = sheet.getRange(ID_RANGE);
     lobbyIdCell.setValue(lobbyData.id);
 
-    const tierCell = sheet.getRange(TIER_RANGE);
+    let tierCell = sheet.getRange(TIER_RANGE);
     tierCell.setValue(tier);
 
-    /*
-    generate mod
-    get desired star rating
-    find beatmap with mod and star rating
-    */
-    const beatmap = findSingleBeatmap(6.0, [Mod.HD]);
-    const mapCell = sheet.getRange(MAP_RANGE);
-    mapCell.setValue(beatmap.beatmap_id);
+    let modPercentages = getModCombinationPercentages();
+    let modStarRatings = getModStarRatings();
+    let beatmapDataArr = [];
+
+    for (let i = 0; i < 2; i++) {
+        let data = generateBeatmapData(modPercentages, modStarRatings);
+        beatmapDataArr.push(data);
+    }
+
+    let mappoolCells = sheet.getRange(MAPPOOL_RANGE);
+
+    let values = createEmptyTable(mappoolCells.getNumRows(), mappoolCells.getNumColumns());
+    for (let i = 0; i < beatmapDataArr.length; i++) {
+        values[i] = beatmapDataArr[i].toLobbyRow();
+    }
+
+    mappoolCells.setValues(values);
+}
+
+function generateBeatmapData(modCombinationPercentages, modStarRatings) {
+    let mods = randomMods(modCombinationPercentages);
+    let starRating = determineModStarRating(modStarRatings, mods);
+    let beatmap = findSingleBeatmap(starRating, mods);
+
+    let ret = {
+        beatmap,
+        mods,
+        toLobbyRow() {
+            // some titles / diff names can include quotation marks so double them to have them display correctly
+            // on google sheets
+            // https://webapps.stackexchange.com/a/58018
+            // example: https://osu.ppy.sh/beatmapsets/177585#osu/427962
+            let mapTitle = `${beatmap.title} [${beatmap.version}]`.replace('"', '""');
+            let mapCommand = `!mp map ${beatmap.beatmap_id} 0`;
+            let modCommand = generateMpModsCommand(mods);
+
+            return [mapTitle, mapCommand, modCommand];
+        },
+    };
+
+    return ret;
 }
