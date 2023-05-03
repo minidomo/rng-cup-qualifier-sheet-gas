@@ -1,0 +1,31 @@
+const SS = SpreadsheetApp.getActiveSpreadsheet();
+const UI = SpreadsheetApp.getUi();
+const CACHE = CacheService.getDocumentCache();
+const PROPERTIES = PropertiesService.getScriptProperties();
+const SETTINGS = SS.getSheetByName('Settings');
+
+// Adds extra menu
+function onOpen(event) {
+    UI.createMenu("Qualifiers")
+        .addItem("Authorize scripts", "authorize")
+        .addSubMenu(UI.createMenu("API Key")
+            .addItem("Add API key", "showKeyStoringPrompt")
+            .addItem("Remove API key", "removeKeyStoringPrompt")
+        )
+        .addSubMenu(UI.createMenu('Create lobby')
+            .addItem('Tier 1', 'createLobbyTier1')
+            .addItem('Tier 2', 'createLobbyTier2')
+        )
+        .addItem('debug', 'getModStarRatings')
+        .addToUi();
+}
+
+// The first time you run a menu function it doesn't actually execute the body
+// after authorizing your Google account, you have to run it again to get the intended effect
+// Many people get confused by this so I made this function
+function authorize() {
+    // Assuming this is the very first menu function you ever run on this
+    // sheet, you'll have to authorize and the body isn't executed
+    // Otherwise, the body *is* going to be run and tell you you're alraedy authorized
+    UI.alert("You're already authorized");
+}
