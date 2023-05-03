@@ -1,16 +1,10 @@
-function getAllSheetNames() {
-    let arr = SS.getSheets()
-        .map(e => e.getSheetName());
-    return arr;
-}
+let LOBBY_SHEET_NAME_REGEX = /^L(\d+)/;
 
 function createEmptyTable(rows, columns) {
     return Array(rows).fill(Array(columns).fill(''));
 }
 
 function generateLobbyId() {
-    let LOBBY_SHEET_NAME_REGEX = /^L(\d+)/;
-
     let lobbyIdSet = new Set(
         getAllSheetNames()
             .map(e => {

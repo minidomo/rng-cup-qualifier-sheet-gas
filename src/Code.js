@@ -17,6 +17,7 @@ function onOpen(event) {
             .addItem('Tier 2', 'createLobbyTier2')
         )
         .addItem('debug', 'testdebug')
+        .addItem('Extract all lobby data', 'extractAllLobbyData')
         .addToUi();
 }
 
@@ -31,6 +32,11 @@ function authorize() {
 }
 
 function testdebug() {
-    let cell = SETTINGS.getRange('C5');
-    cell.setValue(`=HYPERLINK("https://osu.ppy.sh/b/1139789","something")`);
+    extractAllLobbyData();
+}
+
+function getAllSheetNames() {
+    let arr = SS.getSheets()
+        .map(e => e.getSheetName());
+    return arr;
 }
