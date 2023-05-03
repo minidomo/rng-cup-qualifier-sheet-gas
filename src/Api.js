@@ -6,11 +6,20 @@ let API_URL = "https://osu.ppy.sh/api";
 // If run *once* after all lobbies have concluded, then the number of requests will be the number of lobbies
 function getMatchData(id) {
     let apiKey = PROPERTIES.getProperty("apikey");
-    let baseUrl = createUrl(`${API_URL}/get_match`, {
+    let url = createUrl(`${API_URL}/get_match`, {
         k: apiKey,
         mp: id,
     });
-    return requestContent(baseUrl);
+    return requestContent(url);
+}
+
+function getBeatmaps(params) {
+    let apiKey = PROPERTIES.getProperty("apikey");
+    let url = createUrl(`${API_URL}/get_beatmaps`, {
+        k: apiKey,
+        ...params,
+    });
+    return requestContent(url);
 }
 
 function requestContent(url) {

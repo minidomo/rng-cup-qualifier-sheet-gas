@@ -64,21 +64,17 @@ function findLeaderboardBeatmaps(mods) {
         modValue = Mod.DT;
     }
 
-    let apiKey = PROPERTIES.getProperty("apikey");
     let ret = [];
 
     for (let i = 0; i < BEATMAP_SEARCH_REQUEST_PER_ATTEMPT; i++) {
         let timestamp = randomTimestamp();
-        let url = createUrl(`${API_URL}/get_beatmaps`, {
-            k: apiKey,
+        let beatmaps = getBeatmaps({
             since: timestamp,
             limit: BEATMAP_SEARCH_RETURN_LIMIT,
             m: 0,
             mods: modValue,
         });
-
-        let content = requestContent(url);
-        ret.push(...content);
+        ret.push(...beatmaps);
     }
 
     return ret;
