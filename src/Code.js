@@ -20,6 +20,7 @@ function onOpen(event) {
         .addSubMenu(UI.createMenu('User data')
             .addItem('Retrieve by user id', 'retrieveAllUserDataByUserId')
             .addItem('Retrieve by username', 'retrieveAllUserDataByUsername')
+            .addItem('Calculate user stats', 'calculateUserStats')
         )
         // .addSubMenu(UI.createMenu('Evaluation')
         //     .addItem('Tier 1', 'evaluateTier1')
@@ -61,6 +62,18 @@ function createEmptyTable(rows, columns) {
     return Array(rows).fill(Array(columns).fill(''));
 }
 
-function nonEmptyRows(row) {
-    return !row.every(e => e === '');
+function nonEmptyRow(row) {
+    return !row.every(isEmptyValue);
+}
+
+function hasNoEmpty(row) {
+    return row.every(e => !isEmptyValue(e));
+}
+
+function hasSomeEmpty(row) {
+    return row.some(isEmptyValue);
+}
+
+function isEmptyValue(value) {
+    return typeof value === 'string' && value.trim() === '';
 }
