@@ -1,24 +1,25 @@
-function extractAllLobbyData() {
-    let lobbySheetNames = getAllSheetNames().filter(e => LOBBY_SHEET_NAME_REGEX.test(e));
+function extractAllMatchData() {
+    let groupSheetNames = getAllSheetNames().filter(e => GROUP_SHEET_NAME_REGEX.test(e));
     let allRowData = [];
 
-    lobbySheetNames.forEach(sheetName => {
+    groupSheetNames.forEach(sheetName => {
         let sheet = SS.getSheetByName(sheetName);
 
-        let mpLinkRange = 'D4:E4';
-        let mpLinkCell = sheet.getRange(mpLinkRange);
-        let mpLink = mpLinkCell.getValue();
+        let mpLinkRange = 'C14:C32';
+        let mpLinkCells = sheet.getRange(mpLinkRange);
+        let ids = mpLinkCells.getValues()
+            .map(row => getMatchId(row[0].trim()))
+            .filter(id => id);
 
-        let id = getMatchId(mpLink);
-        if (id) {
+        ids.forEach(id => {
             let data = getMatchData(id);
             let rows = createMatchDataRows(data);
             allRowData.push(...rows);
-        }
+        });
     });
 
     if (allRowData.length === 0) {
-        UI.alert('No lobby data found');
+        UI.alert('No match data found');
         return;
     }
 

@@ -1,14 +1,10 @@
-let LOBBY_SHEET_NAME_REGEX = /^L(\d+)/;
+let GROUP_SHEET_NAME_REGEX = /^G(\d+)/;
 
-function createEmptyTable(rows, columns) {
-    return Array(rows).fill(Array(columns).fill(''));
-}
-
-function generateLobbyId() {
-    let lobbyIdSet = new Set(
+function generateGroupId() {
+    let idSet = new Set(
         getAllSheetNames()
             .map(e => {
-                let match = e.match(LOBBY_SHEET_NAME_REGEX);
+                let match = e.match(GROUP_SHEET_NAME_REGEX);
 
                 if (!match) {
                     return null;
@@ -20,16 +16,16 @@ function generateLobbyId() {
     );
 
     let id = 1;
-    while (lobbyIdSet.has(id)) {
+    while (idSet.has(id)) {
         id++;
     }
 
     return id;
 }
 
-function generateLobbyData(tier) {
-    let id = generateLobbyId();
-    let name = `L${id} - T${tier}`;
+function generateGroupData(tier) {
+    let id = generateGroupId();
+    let name = `G${id} - T${tier}`;
 
     let ret = {
         id,
@@ -40,21 +36,21 @@ function generateLobbyData(tier) {
     return ret;
 }
 
-function createLobbyTier1() {
-    createLobby({
+function createGroupTier1() {
+    createGroup({
         tier: 1,
         numMaps: 7,
     });
 }
 
-function createLobbyTier2() {
-    createLobby({
+function createGroupTier2() {
+    createGroup({
         tier: 2,
         numMaps: 9,
     });
 }
 
-function createLobby({
+function createGroup({
     tier,
     numMaps,
 }) {
@@ -62,14 +58,14 @@ function createLobby({
     let TIER_RANGE = 'D3:E3';
     let MAPPOOL_RANGE = 'H3:J22';
 
-    let lobbyData = generateLobbyData(tier);
+    let groupData = generateGroupData(tier);
 
-    let LOBBY_TEMPLATE_SHEET = SS.getSheetByName('Lobby - Template');
-    let sheet = LOBBY_TEMPLATE_SHEET.copyTo(SS);
-    sheet.setName(lobbyData.name);
+    let GROUP_TEMPLATE_SHEET = SS.getSheetByName('Group - Template');
+    let sheet = GROUP_TEMPLATE_SHEET.copyTo(SS);
+    sheet.setName(groupData.name);
 
-    let lobbyIdCell = sheet.getRange(ID_RANGE);
-    lobbyIdCell.setValue(lobbyData.id);
+    let groupIdCell = sheet.getRange(ID_RANGE);
+    groupIdCell.setValue(groupData.id);
 
     let tierCell = sheet.getRange(TIER_RANGE);
     tierCell.setValue(tier);
@@ -85,12 +81,12 @@ function createLobby({
 
     let mappoolCells = sheet.getRange(MAPPOOL_RANGE);
 
-    let values = createEmptyTable(mappoolCells.getNumRows(), mappoolCells.getNumColumns());
+    let mappoolValues = createEmptyTable(mappoolCells.getNumRows(), mappoolCells.getNumColumns());
     for (let i = 0; i < beatmapDataArr.length; i++) {
-        values[i] = beatmapDataArr[i].toLobbyRow();
+        mappoolValues[i] = beatmapDataArr[i].toRow();
     }
 
-    mappoolCells.setValues(values);
+    mappoolCells.setValues(mappoolValues);
 }
 
 function generateBeatmapData(modCombinationPercentages, modStarRatings) {
@@ -101,7 +97,7 @@ function generateBeatmapData(modCombinationPercentages, modStarRatings) {
     let ret = {
         beatmap,
         mods,
-        toLobbyRow() {
+        toRow() {
             // some titles / diff names can include quotation marks so double them to have them display correctly
             // on google sheets
             // https://webapps.stackexchange.com/a/58018

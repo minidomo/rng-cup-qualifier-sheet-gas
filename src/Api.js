@@ -2,8 +2,6 @@ let API_URL = "https://osu.ppy.sh/api";
 
 // https://github.com/ppy/osu-api/wiki
 
-// No caching needed since the amount of requests for qualifier sheets is very low
-// If run *once* after all lobbies have concluded, then the number of requests will be the number of lobbies
 function getMatchData(id) {
     let apiKey = PROPERTIES.getProperty("apikey");
     let url = createUrl(`${API_URL}/get_match`, {

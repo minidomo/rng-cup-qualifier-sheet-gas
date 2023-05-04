@@ -13,16 +13,16 @@ function onOpen(event) {
             .addItem("Add API key", "showKeyStoringPrompt")
             .addItem("Remove API key", "removeKeyStoringPrompt")
         )
-        .addSubMenu(UI.createMenu('Create lobby')
-            .addItem('Tier 1', 'createLobbyTier1')
-            .addItem('Tier 2', 'createLobbyTier2')
+        .addSubMenu(UI.createMenu('Create group')
+            .addItem('Tier 1', 'createGroupTier1')
+            .addItem('Tier 2', 'createGroupTier2')
         )
-        .addSubMenu(UI.createMenu('Evaluation')
-            .addItem('Tier 1', 'evaluateTier1')
-            .addItem('Tier 2', 'evaluateTier2')
-        )
-        .addItem('Generate teams', 'createTeams')
-        .addItem('Extract all lobby data', 'extractAllLobbyData')
+        // .addSubMenu(UI.createMenu('Evaluation')
+        //     .addItem('Tier 1', 'evaluateTier1')
+        //     .addItem('Tier 2', 'evaluateTier2')
+        // )
+        // .addItem('Generate teams', 'createTeams')
+        .addItem('Extract all match data', 'extractAllMatchData')
         .addItem('Debug', 'testdebug')
         .addToUi();
 }
@@ -38,14 +38,20 @@ function authorize() {
 }
 
 function testdebug() {
-    let range = SS.getRangeByName('TeamBreakdown');
-    let values = range.getValues();
-
-    UI.alert(JSON.stringify(values, null, 4));
+    let sheet = SS.getSheetByName('G1 - T1');
+    let values = sheet.getRange('C14:C32').getValues();
+    let ids = values
+        .map(row => getMatchId(row[0].trim()))
+        .filter(id => id);
+    UI.alert(JSON.stringify(ids, null, 4));
 }
 
 function getAllSheetNames() {
     let arr = SS.getSheets()
         .map(e => e.getSheetName());
     return arr;
+}
+
+function createEmptyTable(rows, columns) {
+    return Array(rows).fill(Array(columns).fill(''));
 }
