@@ -21,8 +21,9 @@ function onOpen(event) {
             .addItem('Tier 1', 'evaluateTier1')
             .addItem('Tier 2', 'evaluateTier2')
         )
+        .addItem('Generate teams', 'createTeams')
         .addItem('Extract all lobby data', 'extractAllLobbyData')
-        .addItem('debug', 'testdebug')
+        .addItem('Debug', 'testdebug')
         .addToUi();
 }
 
@@ -37,12 +38,10 @@ function authorize() {
 }
 
 function testdebug() {
-    let userData = readUserData();
-    let scoreData = readScoreData();
-    let data = mergeUsersAndScores(userData, scoreData);
-    let allScores = data.map(user => user.scores);
+    let range = SS.getRangeByName('TeamBreakdown');
+    let values = range.getValues();
 
-    UI.alert(JSON.stringify(allScores, null, 4));
+    UI.alert(JSON.stringify(values, null, 4));
 }
 
 function getAllSheetNames() {

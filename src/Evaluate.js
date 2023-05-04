@@ -82,16 +82,16 @@ function readScoreData() {
 
 function mergeUsersAndScores(users, scores) {
     let ret = users.map(user => {
-        let userScores = scores.filter(e => e.userId === user.id)
-            .map(e => e.score);
+        let userScoresData = scores.filter(e => e.userId === user.id);
+        let userScores = userScoresData.map(e => e.score);
         let totalScore = userScores.reduce((prev, cur) => prev + cur, 0);
 
         let matchName = '';
         let matchId = '';
 
-        if (scores.length > 0) {
-            matchName = scores[0].matchName;
-            matchId = scores[0].matchId;
+        if (userScoresData.length > 0) {
+            matchName = userScoresData[0].matchName;
+            matchId = userScoresData[0].matchId;
         }
 
         return {

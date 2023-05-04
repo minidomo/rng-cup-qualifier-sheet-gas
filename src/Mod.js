@@ -14,8 +14,7 @@ let ModCategory = {
 };
 
 function getModStarRatings() {
-    let MOD_STAR_RATING_RANGE = 'F3:G17';
-    let starRatingCells = SETTINGS.getRange(MOD_STAR_RATING_RANGE);
+    let starRatingCells = SS.getRangeByName('ModStarRatings');
     let values = starRatingCells.getValues().filter(row => row.every(e => e !== ''));
 
     if (values.length === 0) {
@@ -27,8 +26,7 @@ function getModStarRatings() {
 }
 
 function getModCombinationPercentages() {
-    let MOD_COMBINATION_RANGE = 'I3:J17';
-    let modCombinationCells = SETTINGS.getRange(MOD_COMBINATION_RANGE);
+    let modCombinationCells = SS.getRangeByName('ModComboPercentages');
     let values = modCombinationCells.getValues().filter(row => row.every(e => e !== ''));
 
     if (values.length === 0) {
