@@ -39,3 +39,13 @@ function createUrl(baseUrl, params) {
     let url = encodeURI(`${baseUrl}?${searchParams}`);
     return url;
 }
+
+function getUserData(params) {
+    let apiKey = PROPERTIES.getProperty("apikey");
+    let url = createUrl(`${API_URL}/get_user`, {
+        k: apiKey,
+        ...params,
+    });
+    let res = requestContent(url);
+    return res === null ? null : res[0];
+}

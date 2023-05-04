@@ -17,6 +17,10 @@ function onOpen(event) {
             .addItem('Tier 1', 'createGroupTier1')
             .addItem('Tier 2', 'createGroupTier2')
         )
+        .addSubMenu(UI.createMenu('User data')
+            .addItem('Retrieve by user id', 'retrieveAllUserDataByUserId')
+            .addItem('Retrieve by username', 'retrieveAllUserDataByUsername')
+        )
         // .addSubMenu(UI.createMenu('Evaluation')
         //     .addItem('Tier 1', 'evaluateTier1')
         //     .addItem('Tier 2', 'evaluateTier2')
@@ -38,12 +42,13 @@ function authorize() {
 }
 
 function testdebug() {
-    let sheet = SS.getSheetByName('G1 - T1');
-    let values = sheet.getRange('C14:C32').getValues();
-    let ids = values
-        .map(row => getMatchId(row[0].trim()))
-        .filter(id => id);
-    UI.alert(JSON.stringify(ids, null, 4));
+    let usernames = ['_hiroe'];
+    let users = usernames.map(username => getUserData({
+        u: username,
+        type: 'string',
+    }));
+
+    UI.alert(`${users[0].id}, ${users[0].username}, ${users[0].pp_rank}\n${JSON.stringify(users[0], null, 4)}`);
 }
 
 function getAllSheetNames() {
@@ -54,4 +59,8 @@ function getAllSheetNames() {
 
 function createEmptyTable(rows, columns) {
     return Array(rows).fill(Array(columns).fill(''));
+}
+
+function nonEmptyRows(row) {
+    return !row.every(e => e === '');
 }
