@@ -22,7 +22,6 @@ function extractAllLobbyData() {
         return;
     }
 
-    let API_EXTRACT_SHEET = SS.getSheetByName('API Extraction');
     API_EXTRACT_SHEET.getRange(2, 1, allRowData.length, allRowData[0].length).setValues(allRowData);
 }
 

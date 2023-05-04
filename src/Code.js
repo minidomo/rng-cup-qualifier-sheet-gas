@@ -3,6 +3,7 @@ let UI = SpreadsheetApp.getUi();
 let CACHE = CacheService.getDocumentCache();
 let PROPERTIES = PropertiesService.getScriptProperties();
 let SETTINGS = SS.getSheetByName('Settings');
+let API_EXTRACT_SHEET = SS.getSheetByName('API Extraction');
 
 // Adds extra menu
 function onOpen(event) {
@@ -16,8 +17,12 @@ function onOpen(event) {
             .addItem('Tier 1', 'createLobbyTier1')
             .addItem('Tier 2', 'createLobbyTier2')
         )
-        .addItem('debug', 'testdebug')
+        .addSubMenu(UI.createMenu('Evaluation')
+            .addItem('Tier 1', 'evaluateTier1')
+            .addItem('Tier 2', 'evaluateTier2')
+        )
         .addItem('Extract all lobby data', 'extractAllLobbyData')
+        .addItem('debug', 'testdebug')
         .addToUi();
 }
 
@@ -32,7 +37,12 @@ function authorize() {
 }
 
 function testdebug() {
-    extractAllLobbyData();
+    let userData = readUserData();
+    let scoreData = readScoreData();
+    let data = mergeUsersAndScores(userData, scoreData);
+    let allScores = data.map(user => user.scores);
+
+    UI.alert(JSON.stringify(allScores, null, 4));
 }
 
 function getAllSheetNames() {
