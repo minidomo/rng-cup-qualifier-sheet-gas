@@ -43,13 +43,7 @@ function authorize() {
 }
 
 function testdebug() {
-    let usernames = ['_hiroe'];
-    let users = usernames.map(username => getUserData({
-        u: username,
-        type: 'string',
-    }));
-
-    UI.alert(`${users[0].id}, ${users[0].username}, ${users[0].pp_rank}\n${JSON.stringify(users[0], null, 4)}`);
+    UI.alert('test');
 }
 
 function getAllSheetNames() {
