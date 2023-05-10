@@ -3,39 +3,46 @@ namespace MatchDataExtraction {
     const { API_EXTRACTION_SHEET } = Constants.Sheets;
 
     export function extract() {
-        const GROUP_SHEET_NAME_REGEX = /^G\d+/;
-        const groupSheetNames = SheetsUtil.getAllSheetNames().filter(e => GROUP_SHEET_NAME_REGEX.test(e));
-        const allRowData: any[][] = [];
+        const groupSheets = getGroupSheets();
+        const matchIds = getMatchIds(groupSheets);
+        const matches = getMatches(matchIds);
+        const rows = createRows(matches);
 
-        groupSheetNames.forEach(sheetName => {
-            const sheet = SS.getSheetByName(sheetName);
-            if (!sheet) {
-                return;
-            }
-
-            const mpLinkCells = sheet.getRange('C14:C32');
-            const ids = mpLinkCells.getValues()
-                .map(row => getMatchId(row[0].trim()))
-                .filter(id => typeof id === 'string') as string[];
-
-            ids.forEach(id => {
-                const data = OsuApi.getMatch(id);
-                if (data) {
-                    const rows = createRows(data);
-                    allRowData.push(...rows);
-                }
-            });
-        });
-
-        if (allRowData.length === 0) {
+        if (rows.length === 0) {
             UI.alert('No match data found');
             return;
         }
 
-        API_EXTRACTION_SHEET?.getRange(2, 1, allRowData.length, allRowData[0].length).setValues(allRowData);
+        updateSheet(rows);
     }
 
-    function getMatchId(url: string) {
+    function getGroupSheets() {
+        const GROUP_SHEET_NAME_REGEX = /^G\d+/;
+        const groupSheetNames = SheetsUtil.getAllSheetNames().filter(e => GROUP_SHEET_NAME_REGEX.test(e));
+        const sheets = groupSheetNames.map(name => SS.getSheetByName(name)).filter(e => e !== null);
+        return sheets as GoogleAppsScript.Spreadsheet.Sheet[];
+    }
+
+    function getMatchIds(sheets: GoogleAppsScript.Spreadsheet.Sheet[]) {
+        const ids = sheets
+            .map(sheet => {
+                const mpLinkCells = sheet.getRange('C14:C32');
+                const curIds = mpLinkCells.getValues()
+                    .map(row => parseMatchId(row[0].trim()))
+                    .filter(e => e !== null) as string[];
+                return curIds;
+            })
+            .reduce((prev, cur) => prev.concat(cur), []);
+        return ids;
+    }
+
+    function getMatches(matchIds: string[]) {
+        const matches = matchIds.map(id => OsuApi.getMatch(id))
+            .filter(e => typeof e !== 'undefined') as OsuApiTypes.MatchResponse[];
+        return matches;
+    }
+
+    function parseMatchId(url: string) {
         const match = url.match(/(\d+)$/);
         if (match) {
             return match[1];
@@ -43,23 +50,31 @@ namespace MatchDataExtraction {
         return null;
     }
 
-    function createRows(data: OsuApiTypes.MatchResponse) {
-        const matchName = data.match.name;
-        const matchId = data.match.match_id;
+    function createRows(matches: OsuApiTypes.MatchResponse[]) {
+        const allRows = matches
+            .map(matchData => {
+                const matchRows: string[][] = [];
 
-        const ret: string[][] = [];
+                const matchName = matchData.match.name;
+                const matchId = matchData.match.match_id
 
-        data.games.forEach(game => {
-            const beatmapId = game.beatmap_id;
+                matchData.games.forEach(game => {
+                    const beatmapId = game.beatmap_id;
 
-            game.scores.forEach(scoreData => {
-                const userId = scoreData.user_id;
-                const score = scoreData.score;
+                    game.scores.forEach(scoreData => {
+                        const userId = scoreData.user_id;
+                        const score = scoreData.score;
+                        matchRows.push([matchName, matchId, beatmapId, userId, score]);
+                    });
+                });
 
-                ret.push([matchName, matchId, beatmapId, userId, score]);
-            });
-        });
+                return matchRows;
+            })
+            .reduce((prev, cur) => prev.concat(cur), []);
+        return allRows;
+    }
 
-        return ret;
+    function updateSheet(rows: string[][]) {
+        API_EXTRACTION_SHEET?.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
     }
 }
