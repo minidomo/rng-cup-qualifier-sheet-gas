@@ -20,8 +20,10 @@ namespace MatchDataExtraction {
 
             ids.forEach(id => {
                 const data = OsuApi.getMatch(id);
-                const rows: string[][] = [];
-                allRowData.push(...rows);
+                if (data) {
+                    const rows = createRows(data);
+                    allRowData.push(...rows);
+                }
             });
         });
 
@@ -41,23 +43,23 @@ namespace MatchDataExtraction {
         return null;
     }
 
-    // function createRows(data: any) {
-    //     let matchName = data.match.name;
-    //     let matchId = data.match.match_id;
+    function createRows(data: OsuApiTypes.MatchResponse) {
+        const matchName = data.match.name;
+        const matchId = data.match.match_id;
 
-    //     const ret = [];
+        const ret: string[][] = [];
 
-    //     data.games.forEach(game => {
-    //         let beatmapId = game.beatmap_id;
+        data.games.forEach(game => {
+            const beatmapId = game.beatmap_id;
 
-    //         game.scores.forEach(scoreData => {
-    //             let userId = scoreData.user_id;
-    //             let score = scoreData.score;
+            game.scores.forEach(scoreData => {
+                const userId = scoreData.user_id;
+                const score = scoreData.score;
 
-    //             ret.push([matchName, matchId, beatmapId, userId, score]);
-    //         });
-    //     });
+                ret.push([matchName, matchId, beatmapId, userId, score]);
+            });
+        });
 
-    //     return ret;
-    // }
+        return ret;
+    }
 }

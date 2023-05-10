@@ -1,3 +1,5 @@
+// https://github.com/ppy/osu-api/wiki
+
 declare namespace OsuApiTypes {
     interface MatchGeneralData {
         match_id: string,

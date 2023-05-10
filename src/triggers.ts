@@ -20,7 +20,7 @@ function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
         //     .addItem('Tier 2', 'evaluateTier2')
         // )
         // .addItem('Generate teams', 'createTeams')
-        .addItem('Extract all match data', 'extractAllMatchData')
+        .addItem('Extract all match data', 'MatchDataExtraction.extract')
         .addItem('Debug', 'testdebug')
         .addToUi();
 }
