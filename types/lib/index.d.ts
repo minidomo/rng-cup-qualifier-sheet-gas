@@ -1,0 +1,1 @@
+/// <reference path="osu-api.d.ts" />

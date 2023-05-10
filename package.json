@@ -1,15 +1,14 @@
 {
-  "name": "rng-cup-qualifier-sheet-template",
+  "name": "rng-cup-qualifier-sheet",
   "version": "1.0.0",
   "description": "",
-  "main": "Api.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "",
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.62"
+    "@types/google-apps-script": "^1.0.63",
+    "typescript": "^4.9.5"
   }
 }
