@@ -17,8 +17,8 @@ namespace MatchDataExtraction {
     }
 
     function getGroupSheets() {
-        const GROUP_SHEET_NAME_REGEX = /^G\d+/;
-        const groupSheetNames = SheetsUtil.getAllSheetNames().filter(e => GROUP_SHEET_NAME_REGEX.test(e));
+        const SHEET_NAME_REGEX = /^G\d+/;
+        const groupSheetNames = SheetsUtil.getAllSheetNames().filter(e => SHEET_NAME_REGEX.test(e));
         const sheets = groupSheetNames.map(name => SS.getSheetByName(name)).filter(e => e !== null);
         return sheets as GoogleAppsScript.Spreadsheet.Sheet[];
     }

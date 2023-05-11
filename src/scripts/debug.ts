@@ -2,30 +2,39 @@ namespace Debug {
     const { UI } = Constants;
 
     export function test() {
-        const users = UserData.getRegisteredUsers();
+        const teams = Constants.Sheets.TEAMS_SHEET?.getRange('C3:F')
+            .getValues()
+            .filter(row => !RowUtil.isEmpty(row))
+            .map(row => row.map(e => StringUtil.convert(e))) as string[][];
 
-        if (users.length === 0) {
-            UI.alert('No users found');
-            return;
-        }
+        const evaluations = EvaluationData.getEvaluations().filter(e => parseInt(e.rank) <= 32);
+        const missing: string[] = [];
+        const uneven: number[] = [];
 
-        const fixedUsers = uniqueUsers(users);
+        teams.forEach((team, i) => {
+            let t1 = 0;
+            let t2 = 0;
 
-        UI.alert(`${users.length} | ${fixedUsers.length}`);
-    }
+            team.forEach(username => {
+                const evaluation = evaluations.find(e => e.username === username);
 
-    function uniqueUsers(users: UserDataTypes.RegisteredUser[]) {
-        const userIdSet = new Set();
+                if (!evaluation) {
+                    missing.push(username);
+                    return;
+                }
 
-        const ret = users.filter(user => {
-            if (userIdSet.has(user.osu.id)) {
-                return false;
+                if (evaluation.tier === '1') {
+                    t1++;
+                } else {
+                    t2++;
+                }
+            });
+
+            if (t1 !== 2 || t2 !== 2) {
+                uneven.push(i + 1);
             }
-
-            userIdSet.add(user.osu.id);
-            return true;
         });
 
-        return ret;
+        UI.alert(`missing: ${missing}\nuneven teams: ${uneven}`);
     }
 }

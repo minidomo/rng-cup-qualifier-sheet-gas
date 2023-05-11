@@ -10,5 +10,6 @@ namespace Constants {
         export const API_EXTRACTION_SHEET = Constants.SS.getSheetByName('API Extraction');
         export const USERS_SHEET = Constants.SS.getSheetByName('Users');
         export const EVALUATIONS_TEMPLATE_SHEET = Constants.SS.getSheetByName('Evaluations - Template');
+        export const TEAMS_SHEET = Constants.SS.getSheetByName('Teams');
     }
 }
