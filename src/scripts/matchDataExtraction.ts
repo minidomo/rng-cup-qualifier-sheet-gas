@@ -27,7 +27,8 @@ namespace MatchDataExtraction {
         const ids = sheets
             .map(sheet => {
                 const mpLinkCells = sheet.getRange('C14:C32');
-                const curIds = mpLinkCells.getValues()
+                const curIds = mpLinkCells
+                    .getValues()
                     .map(row => parseMatchId(row[0].trim()))
                     .filter(e => e !== null) as string[];
                 return curIds;
@@ -37,7 +38,8 @@ namespace MatchDataExtraction {
     }
 
     function getMatches(matchIds: string[]) {
-        const matches = matchIds.map(id => OsuApi.getMatch(id))
+        const matches = matchIds
+            .map(id => OsuApi.getMatch(id))
             .filter(e => typeof e !== 'undefined') as OsuApiTypes.MatchResponse[];
         return matches;
     }
@@ -56,7 +58,7 @@ namespace MatchDataExtraction {
                 const matchRows: string[][] = [];
 
                 const matchName = matchData.match.name;
-                const matchId = matchData.match.match_id
+                const matchId = matchData.match.match_id;
 
                 matchData.games.forEach(game => {
                     const beatmapId = game.beatmap_id;

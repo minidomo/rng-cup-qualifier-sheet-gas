@@ -5,7 +5,9 @@ namespace OsuApi {
     const API_URL = 'https://osu.ppy.sh/api';
 
     function createUrl(baseUrl: string, params: Record<string, any>) {
-        const searchParams = Object.keys(params).map(e => `${e}=${params[e]}`).join('&');
+        const searchParams = Object.keys(params)
+            .map(e => `${e}=${params[e]}`)
+            .join('&');
         const url = encodeURI(`${baseUrl}?${searchParams}`);
         return url;
     }
