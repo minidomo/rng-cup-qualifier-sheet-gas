@@ -14,11 +14,13 @@ function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
             UI.createMenu('User data')
                 .addItem('Retrieve by user id', 'User.retrieveAllUserDataByUserId')
                 .addItem('Retrieve by username', 'User.retrieveAllUserDataByUsername')
-                .addItem('Calculate user stats', 'User.calculateUserStats'),
+                .addItem('Calculate user stats', 'User.calculateUserStats')
+                .addItem('Remove duplicate users', 'User.removeDuplicateUsers'),
         )
-        .addSubMenu(UI.createMenu('Evaluation')
-            .addItem('Tier 1', 'Evaluation.evaluateTier1')
-            .addItem('Tier 2', 'Evaluation.evaluateTier2')
+        .addSubMenu(
+            UI.createMenu('Evaluation')
+                .addItem('Tier 1', 'Evaluation.evaluateTier1')
+                .addItem('Tier 2', 'Evaluation.evaluateTier2'),
         )
         .addItem('Generate teams', 'Team.create')
         .addItem('Extract all match data', 'MatchDataExtraction.extract')

@@ -2,7 +2,8 @@ namespace ScoreData {
     const { SS } = Constants;
 
     export function getScores() {
-        const rows = SS.getRange('API Extraction!A2:E').getValues()
+        const rows = SS.getRange('API Extraction!A2:E')
+            .getValues()
             .filter(row => !RowUtil.isEmpty(row));
         const scores = toScores(rows);
         return scores;

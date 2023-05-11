@@ -2,7 +2,8 @@ namespace UserData {
     const { SS } = Constants;
 
     export function getRegisteredUsers() {
-        const rows = SS.getRange('Users!A2:G').getValues()
+        const rows = SS.getRange('Users!A2:G')
+            .getValues()
             .filter(row => !RowUtil.isEmpty(row));
         const users = toRegisteredUsers(rows);
         return users;
@@ -28,5 +29,9 @@ namespace UserData {
         });
 
         return users;
+    }
+
+    export function registeredUserToRow(user: UserDataTypes.RegisteredUser) {
+        return [user.discord.username, user.osu.id, user.osu.username, user.osu.rank, user.badges, user.bws, user.tier];
     }
 }
