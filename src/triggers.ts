@@ -1,7 +1,7 @@
 function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
     const { UI } = Constants;
     UI.createMenu('Custom scripts')
-        .addItem('Authorize scripts', 'authorize')
+        .addItem('Authorize scripts', 'Authorization.authorize')
         .addSubMenu(
             UI.createMenu('API Key')
                 .addItem('Add API key', 'OsuApiKeyManager.showKeyStoringPrompt')
