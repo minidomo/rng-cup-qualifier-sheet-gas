@@ -5,6 +5,6 @@ namespace Constants {
     export const PROPERTIES = PropertiesService.getScriptProperties();
 
     export namespace Sheets {
-        export const API_EXTRACTION_SHEET = SS.getSheetByName('API Extraction');
+        export const API_EXTRACTION_SHEET = Constants.SS.getSheetByName('API Extraction');
     }
 }
