@@ -5,8 +5,7 @@ namespace UserData {
         const rows = SS.getRange('Users!A2:G').getValues()
             .filter(row => !RowUtil.isEmpty(row));
         const users = toRegisteredUsers(rows);
-        const uniqueUsers = uniqueRegisteredUsers(users);
-        return uniqueUsers;
+        return users;
     }
 
     function toRegisteredUsers(rows: any[][]) {
@@ -29,20 +28,5 @@ namespace UserData {
         });
 
         return users;
-    }
-
-    function uniqueRegisteredUsers(users: UserDataTypes.RegisteredUser[]) {
-        const userIdSet = new Set();
-
-        const ret = users.filter(user => {
-            if (userIdSet.has(user.osu.id)) {
-                return false;
-            }
-
-            userIdSet.add(user.osu.id);
-            return true;
-        });
-
-        return ret;
     }
 }
