@@ -21,7 +21,6 @@ namespace User {
         // user ids and their osu user data
         const userIdMap = createUserMap(userIds, 'id');
 
-        // get osu related columns and update them
         updateOsuData(userIdMap, 0);
     }
 
@@ -44,7 +43,6 @@ namespace User {
         // usernames and their osu user data
         const usernameMap = createUserMap(usernames, 'string');
 
-        // get osu related columns and update them
         updateOsuData(usernameMap, 1);
     }
 
@@ -73,6 +71,7 @@ namespace User {
             return;
         }
 
+        // get osu related columns and update them
         const rows = USERS_SHEET.getRange('B2:D')
             .getValues()
             .map(row => {
@@ -90,7 +89,45 @@ namespace User {
     }
 
     export function calculateUserStats() {
-        UI.alert('This script is being rewritten');
+        if (!USERS_SHEET) {
+            UI.alert('No users sheet found');
+            return;
+        }
+
+        // get related columns and make new data with them
+        const rows = USERS_SHEET.getRange('D2:E')
+            .getValues()
+            .map(row => {
+                if (RowUtil.hasEmpty(row)) {
+                    return ['', ''];
+                }
+
+                const rank = parseInt(StringUtil.convert(row[0]));
+                const badges = parseInt(StringUtil.convert(row[1]));
+
+                const bws = bwsFormula(rank, badges);
+                const tier = determineTier(bws);
+                return [bws, tier];
+            });
+
+        // update new columns with data
+        USERS_SHEET.getRange(2, 6, rows.length, rows[0].length).setValues(rows);
+    }
+
+    function bwsFormula(rank: number, badges: number) {
+        return Math.pow(rank, Math.pow(0.9, 2 * badges));
+    }
+
+    function determineTier(bws: number) {
+        if (bws < 1000) {
+            return 'DQ';
+        }
+
+        if (1000 <= bws && bws < 10000) {
+            return 1;
+        }
+
+        return 2;
     }
 
     export function removeDuplicateUsers() {
