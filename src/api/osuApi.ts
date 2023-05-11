@@ -19,7 +19,7 @@ namespace OsuApi {
             ...params,
         });
 
-        Utilities.sleep(500); // lessen api laod
+        Utilities.sleep(HttpDelayManager.getHttpDelay()); // lessen api laod
         const requestData = UrlFetchApp.fetch(url);
 
         if (requestData.getResponseCode() === 200) {

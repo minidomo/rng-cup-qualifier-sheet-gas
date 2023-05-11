@@ -24,6 +24,7 @@ function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
         )
         .addItem('Generate teams', 'Team.create')
         .addItem('Extract all match data', 'MatchDataExtraction.extract')
+        .addItem('Set HTTP delay', 'HttpDelayManager.showPrompt')
         .addItem('Debug', 'Debug.test')
         .addToUi();
 }
