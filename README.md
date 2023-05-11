@@ -13,7 +13,7 @@ These are scripts for the RNG Cup Qualifier Google Sheet.
 
 Clone the repository and install dependencies.
 
-```console
+```sh
 git clone https://github.com/minidomo/rng-cup-qualifier-sheet-gzs.git
 cd rng-cup-qualifier-sheet-gzs
 npm install
@@ -21,13 +21,13 @@ npm install
 
 Set up `.clasp.json` and provide your `scriptId`.
 
-```console
+```sh
 cp .clasp.json.example .clasp.json
 ```
 
 Push your code to Apps Script:
 
-```console
+```sh
 clasp push
 ```
 
