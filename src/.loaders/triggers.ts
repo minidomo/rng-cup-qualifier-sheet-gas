@@ -20,7 +20,8 @@ function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
         .addSubMenu(
             UI.createMenu('Evaluation')
                 .addItem('Tier 1', 'Evaluation.evaluateTier1')
-                .addItem('Tier 2', 'Evaluation.evaluateTier2'),
+                .addItem('Tier 2', 'Evaluation.evaluateTier2')
+                .addItem('Group', 'GroupEvaluation.showPrompt'),
         )
         .addItem('Generate teams', 'Team.create')
         .addItem('Extract all match data', 'MatchDataExtraction.extract')

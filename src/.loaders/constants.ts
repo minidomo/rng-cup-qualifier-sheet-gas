@@ -11,5 +11,6 @@ namespace Constants {
         export const USERS_SHEET = Constants.SS.getSheetByName('Users');
         export const EVALUATIONS_TEMPLATE_SHEET = Constants.SS.getSheetByName('Evaluations - Template');
         export const TEAMS_SHEET = Constants.SS.getSheetByName('Teams');
+        export const GROUP_EVALUATION_TEMPLATE_SHEET = Constants.SS.getSheetByName('Group Evaluation - Template');
     }
 }
